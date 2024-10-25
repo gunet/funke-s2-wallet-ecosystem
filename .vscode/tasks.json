@@ -1,0 +1,35 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Push to Prod 👍 Backend",
+			"type": "shell",
+			"command": "cd funke-wallet-backend-server; docker build --secret id=npmrc,src=.npmrc  -t ghcr.io/gunet/wallet-backend-server:funke . && echo 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 | docker login ghcr.io -u kkmanos --password-stdin && docker push ghcr.io/gunet/wallet-backend-server:funke",
+			"problemMatcher": [],
+			"group": {
+				"kind": "none",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "Push to Prod 👍 Frontend",
+			"type": "shell",
+			"command": "cd funke-wallet-frontend; docker build --secret id=npmrc,src=.npmrc  -t ghcr.io/gunet/wallet-frontend:funke . && echo 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 | docker login ghcr.io -u kkmanos --password-stdin && docker push ghcr.io/gunet/wallet-frontend:funke",
+			"problemMatcher": [],
+			"group": {
+				"kind": "none",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "Push to Prod 👍 Acme",
+			"type": "shell",
+			"command": "cd funke-wallet-enterprise && docker build --secret id=npmrc,src=.npmrc -t ghcr.io/gunet/funke-wallet-enterprise:base -f base.Dockerfile . && cd .. && docker build --secret id=npmrc,src=.npmrc  -t ghcr.io/gunet/wallet-enterprise-acme-verifier:funke -f wallet-enterprise-configurations/acme-verifier/Dockerfile . && echo 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 | docker login ghcr.io -u kkmanos --password-stdin && docker push ghcr.io/gunet/wallet-enterprise-acme-verifier:funke",
+			"problemMatcher": [],
+			"group": {
+				"kind": "none",
+				"isDefault": true
+			}
+		}
+	]
+}

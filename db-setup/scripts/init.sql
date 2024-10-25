@@ -1,0 +1,3 @@
+CREATE DATABASE wallet;
+CREATE DATABASE verifier;
+CREATE DATABASE por_issuer;

@@ -1,0 +1,29 @@
+FROM debian:bullseye-slim
+# An Apache Reverse Proxy
+
+RUN apt-get update && apt-get install -yq --no-install-recommends curl \
+    openssl apache2 apache2-utils procps && \
+	rm -rf /var/lib/apt/lists/*
+
+RUN rm -f /var/log/apache2/*.log && \
+    ln -s /dev/stdout /var/log/apache2/access.log && \
+    ln -s /dev/stdout /var/log/apache2/other_vhosts_access.log && \
+    ln -s /dev/stderr /var/log/apache2/error.log
+
+RUN a2enmod -q socache_shmcb ssl proxy proxy_http proxy_uwsgi proxy_wstunnel rewrite headers
+
+#    a2ensite -q default-ssl
+RUN a2disconf charset localized-error-pages serve-cgi-bin && \
+    a2dismod -f access_compat autoindex deflate negotiation status
+
+COPY ./sites/ /etc/apache2/sites-available/
+
+COPY ./certs/ /etc/apache2/certs/
+
+RUN a2ensite secure.wwwallet.local-ssl
+
+EXPOSE 80/tcp 443/tcp
+
+HEALTHCHECK --interval=5s --timeout=2s --start-period=5s --retries=3 CMD /usr/bin/pgrep -c -u www-data apache2
+
+CMD [ "apache2ctl", "-D", "FOREGROUND" ]
