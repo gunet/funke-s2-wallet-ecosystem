@@ -5,6 +5,42 @@ import { config } from "../../../config";
 import { VerifierConfigurationInterface } from "../../services/interfaces";
 import "reflect-metadata";
 
+const pidDescriptor = {
+	"id": "VID",
+	"constraints": {
+		"fields": [
+			{
+				"name": "Credential type",
+				"path": [
+					"$.vct"
+				],
+				"filter": {
+					"type": "string",
+					"enum": [
+						"https://example.bmi.bund.de/credential/pid/1.0",
+						"urn:eu.europa.ec.eudi:pid:1"
+					]
+				}
+			},
+			{
+				"name": "Given Name",
+				"path": ['$.given_name'],
+				"filter": {}
+			},
+			{
+				"name": "Family Name",
+				"path": ['$.family_name'],
+				"filter": {}
+			},
+			{
+				"name": "Birthdate",
+				"path": ['$.birthdate'],
+				"filter": {}
+			}
+		]
+	}
+}
+
 @injectable()
 export class VerifierConfigurationService implements VerifierConfigurationInterface {
 
@@ -12,32 +48,9 @@ export class VerifierConfigurationService implements VerifierConfigurationInterf
 		return [
 			{
 				"id": "vid",
-				"format": { "vc+sd-jwt": { alg: [ 'ES256' ] }, jwt_vp: { alg: [ 'ES256' ] } },
+				"format": { "vc+sd-jwt": { alg: [ 'ES256' ] }  },
 				"input_descriptors": [
-					{
-						"id": "VID",
-						"constraints": {
-							"fields": [
-								{
-									"name": "Document Number",
-									"path": [
-										"$.document_number"
-									],
-									"filter": {}
-								},
-								{
-									"name": "Credential Type",
-									"path": [
-										"$.vct"
-									],
-									"filter": {
-										"type": "string",
-										"const": "urn:credential:vid"
-									}
-								}
-							]
-						}
-					}
+					pidDescriptor,
 				]
 			}
 		]

@@ -161,6 +161,7 @@ services:
       - ./wallet-enterprise-configurations/por-issuer/keys:/app/keys:rw
       - ./wallet-enterprise-configurations/por-issuer/src/configuration:/app/src/configuration:rw
       - ./wallet-enterprise-configurations/por-issuer/public/images:/app/public/images:rw
+      - ./wallet-enterprise-configurations/por-issuer/views/issuer/auth-method-selection.pug:/app/views/issuer/auth-method-selection.pug:rw
       - ./wallet-enterprise-configurations/por-issuer/public/styles/main.css:/app/public/styles/main.css:rw
       - ./.vscode/:/app/.vscode:rw
       - type: tmpfs

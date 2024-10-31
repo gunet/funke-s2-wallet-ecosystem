@@ -2,8 +2,8 @@ const locale = {
 	en: {
 		landingPageFaClass: "fa-graduation-cap",
 		header: {
-			title: "eDiplomas Issuer",
-			subtitle: "Receive your Bachelor diplomas",
+			title: "Power of Representation Issuer",
+			subtitle: "Receive your PoR in verifiable credential format",
 		},
 		plainHeader: {
 			title: "National Authentication Service",
@@ -21,9 +21,9 @@ const locale = {
 			emailForOrgs: "E-mail for Institutions"
 		},
 		index: {
-			header: "eDiplomas Issuer",
-			phrase: "I am the owner of a University Degree",
-			subtitle: "I want to receive a University Degree Verifiable Credential",
+			header: "Power of Representation Issuer",
+			phrase: "Receive your PoR in verifiable credential format",
+			subtitle: "I want to receive a PoR Verifiable Credential",
 			proceed: "Proceed",
 			heading: "Overview",
 			paragraph: "The eDiplomas VC EDU Issuer has been developed in the framework of the",
