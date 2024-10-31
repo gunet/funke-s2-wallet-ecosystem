@@ -2,7 +2,7 @@ import { config } from "../../../config";
 import { VerifiableCredentialFormat } from "../../types/oid4vci";
 import { CategorizedRawCredentialView, CategorizedRawCredentialViewRow } from "../../openid4vci/Metadata";
 import { VCDMSupportedCredentialProtocol } from "../../lib/CredentialIssuerConfig/SupportedCredentialProtocol";
-import { formatDateDDMMYYYY } from "../../lib/formatDate";
+// import { formatDateDDMMYYYY } from "../../lib/formatDate";
 import { generateDataUriFromSvg } from "../../lib/generateDataUriFromSvg";
 import { AuthorizationServerState } from "../../entities/AuthorizationServerState.entity";
 import { CredentialView } from "../../authorization/types";
@@ -15,7 +15,7 @@ import { randomUUID } from "crypto";
 import { Request } from "express";
 import fs from 'fs';
 
-parseDiplomaData(path.join(__dirname, "../../../../dataset/diploma-dataset.xlsx"));
+parseDiplomaData(path.join(__dirname, "../../../../dataset/por-dataset.xlsx"));
 
 export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProtocol {
 
@@ -24,10 +24,10 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 
 
 	getId(): string {
-		return "urn:credential:diploma";
+		return "urn:credential:por";
 	}
 	getScope(): string {
-		return "diploma";
+		return "por";
 	}
 
 	getCredentialSigner(): CredentialSigner {
@@ -38,12 +38,12 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 		return VerifiableCredentialFormat.VC_SD_JWT;
 	}
 	getTypes(): string[] {
-		return ["VerifiableCredential", "VerifiableAttestation", "Bachelor", this.getId()];
+		return ["VerifiableCredential", "VerifiableAttestation", "PowerOfRepresentation", this.getId()];
 	}
 	getDisplay() {
 		return {
-			name: "Bachelor Diploma",
-			description: "This is a Bachelor Diploma verifiable credential issued by the well-known eDiplomas",
+			name: "Power of Representation credential",
+			description: "This is a Power of Representation credential",
 			background_image: { uri: config.url + "/images/card.png" },
 			background_color: "#4CC3DD",
 			locale: 'en-US',
@@ -52,18 +52,24 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 
 
 	async getProfile(userSession: AuthorizationServerState): Promise<CredentialView | null> {
-		if (!userSession?.document_number) {
-			console.log("Cannot generate credential: (document_number) is missing");
-			return null;
+		if (!userSession?.family_name || !userSession?.given_name || !userSession?.birthdate) {
+			throw new Error("Cannot generate credential: (family_name, given_name, birthdate) is missing");
 		}
 
 
-		const diplomaEntries = parseDiplomaData(path.join(__dirname, "../../../../dataset/diploma-dataset.xlsx"));
+		const diplomaEntries = parseDiplomaData(path.join(__dirname, "../../../../dataset/por-dataset.xlsx"));
 		if (!diplomaEntries || diplomaEntries.length == 0) {
 			throw new Error("No diploma entries found");
 		}
+
+		console.log("D Entries: ", diplomaEntries)
+		console.log("Dataset birthdate = ", diplomaEntries[0].birthdate)
+		console.log("user session birthdate = ", userSession.birthdate)
+		console.log("Comparison = ", new Date(diplomaEntries[0].birthdate).toISOString() == new Date(userSession.birthdate).toISOString())
 		const diplomaEntry = diplomaEntries.filter((diploma) =>
-			String(diploma.vid_document_number) == userSession.document_number
+			String(diploma.family_name) == userSession.family_name &&
+			String(diploma.given_name) == userSession.given_name &&
+			new Date(diploma.birthdate as any).toISOString() == new Date(userSession.birthdate as any).toISOString()
 		)[0];
 
 		console.log("Diploma entry = ", diplomaEntry)
@@ -75,22 +81,21 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 		const svgText = fs.readFileSync(path.join(__dirname, "../../../../public/images/template.svg"), 'utf-8');
 
 		const rows: CategorizedRawCredentialViewRow[] = [
-			{ name: "Given Name", value: diplomaEntry.given_name },
-			{ name: "Family Name", value: diplomaEntry.family_name },
-			{ name: "Title", value: diplomaEntry.title },
-			{ name: "Grade", value: diplomaEntry.grade },
-			{ name: "Graduation Date", value: formatDateDDMMYYYY(diplomaEntry.graduation_date) },
-			{ name: "Blueprint ID", value: "#" + diplomaEntry.blueprint_id },
-			{ name: "Expiry Date", value: formatDateDDMMYYYY(diplomaEntry.expiry_date) },
+			{ name: "Legal Name", value: diplomaEntry.legal_name },
+			{ name: "Legal Person Identifier", value: diplomaEntry.legal_person_identifier },
+			{ name: "Full Powers", value: diplomaEntry.full_powers },
+			{ name: "Effective From", value: diplomaEntry.effective_from_date },
+			{ name: "Effective Until", value: diplomaEntry.effective_until_date },
 		];
 		const rowsObject: CategorizedRawCredentialView = { rows };
 
 		const pathsWithValues = [
-			{ path: "given_name", value: diplomaEntry.given_name },
-			{ path: "family_name", value: diplomaEntry.family_name },
-			{ path: "title", value: diplomaEntry.title },
-			{ path: "graduation_date", value: formatDateDDMMYYYY(diplomaEntry.graduation_date) },
-			{ path: "expiry_date", value: formatDateDDMMYYYY(diplomaEntry.expiry_date) },
+			{ path: "legal_name", value: diplomaEntry.legal_name },
+			{ path: "legal_person_identifier", value: diplomaEntry.legal_person_identifier },
+			{ path: "full_powers", value: diplomaEntry.full_powers },
+
+			{ path: "effective_from_date", value: new Date(diplomaEntry.effective_from_date).toISOString() },
+			{ path: "effective_until_date", value: new Date(diplomaEntry.effective_until_date).toISOString() },
 		];
 		const dataUri = generateDataUriFromSvg(svgText, pathsWithValues);
 
@@ -104,16 +109,19 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 	}
 
 	async generateCredentialResponse(userSession: AuthorizationServerState, request: Request, holderPublicKeyJwk: JWK): Promise<{ format: VerifiableCredentialFormat; credential: any; }> {
-		if (!userSession?.document_number) {
-			throw new Error("Cannot generate credential: (document_number) is missing");
+		if (!userSession?.family_name || !userSession?.given_name || !userSession?.birthdate) {
+			throw new Error("Cannot generate credential: (family_name, given_name, birthdate) is missing");
+		}
+		const diplomaEntries = parseDiplomaData(path.join(__dirname, "../../../../dataset/por-dataset.xlsx"));
+		if (!diplomaEntries || diplomaEntries.length == 0) {
+			throw new Error("No entries found");
 		}
 
-		const diplomaEntries = parseDiplomaData(path.join(__dirname, "../../../../dataset/diploma-dataset.xlsx"));
-		if (!diplomaEntries || diplomaEntries.length == 0) {
-			throw new Error("No diploma entries found");
-		}
+		console.log("Entries = ", diplomaEntries)
 		const diplomaEntry = diplomaEntries.filter((diploma) =>
-			String(diploma.vid_document_number) == userSession.document_number
+			String(diploma.family_name) == userSession.family_name &&
+			String(diploma.given_name) == userSession.given_name &&
+			new Date(diploma.birthdate as any).toISOString() == new Date(userSession.birthdate as any).toISOString()
 		)[0];
 
 		if (!diplomaEntry) {
@@ -131,22 +139,22 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 				"jwk": holderPublicKeyJwk
 			},
 			"vct": this.getId(),
-			"jti": `urn:credential:diploma:${randomUUID()}`,
-			"family_name": diplomaEntry.family_name,
-			"given_name": diplomaEntry.given_name,
-			"title": diplomaEntry.title,
-			"grade": String(diplomaEntry.grade),
-			"eqf_level": String(diplomaEntry.eqf_level),
-			"graduation_date": new Date(diplomaEntry.graduation_date).toISOString(),
+			"jti": `urn:credential:por:${randomUUID()}`,
+			"legal_person_identifier": String(diplomaEntry.legal_person_identifier),
+			"legal_name": String(diplomaEntry.legal_name),
+			"full_powers": String(diplomaEntry.full_powers),
 			"expiry_date": new Date(diplomaEntry.expiry_date).toISOString(),
+			"issuing_date": new Date(diplomaEntry.issuing_date).toISOString(),
+
+			"effective_from_date": new Date(diplomaEntry.effective_from_date).toISOString(),
+			"effective_until_date": diplomaEntry.effective_until_date && new Date(diplomaEntry.effective_until_date).toISOString(),
 		};
 
 		const disclosureFrame = {
-			title: true,
-			grade: true,
-			eqf_level: false, // no ability to hide
-			graduation_date: true,
-		}
+			legal_person_identifier: true,
+			legal_name: true,
+			full_powers: true,
+		};
 
 		const { jws } = await this.getCredentialSigner()
 			.sign(payload, { typ: "JWT", vctm: this.metadata() }, disclosureFrame);
@@ -162,18 +170,18 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 	public metadata(): any {
 		return {
 			"vct": this.getId(),
-			"name": "Diploma Credential",
-			"description": "This is a Verifiable ID document issued by the well known VID Issuer",
+			"name": "Power of Representation credential",
+			"description": "This is a Power of Representation credential",
 			"display": [
 				{
 					"en-US": {
-						"name": "Diploma Credential",
+						"name": "Power of Representation credential",
 						"rendering": {
 							"simple": {
 								"logo": {
 									"uri": config.url + "/images/card.png",
 									"uri#integrity": "sha256-c7fbfe45428aa2715f01065d812c9f6fd52f99c02e4018fb5761a7cbf4894257",
-									"alt_text": "Diploma Card"
+									"alt_text": "This is a Power of Representation credential",
 								},
 								"background_color": "#12107c",
 								"text_color": "#FFFFFF"
