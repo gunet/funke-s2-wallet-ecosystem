@@ -23,6 +23,16 @@ node ecosystem.js init
 ```
 
 
+### secure.wwwallet.local as wallet frontend callback url
+
+Include the following line in the `/etc/hosts` file
+
+```
+127.0.0.1	secure.wwwallet.local
+```
+
+The secure.wwwallet.local will only be used as a callback. It is used only because the Funke PID issuer does not accept non-https urls for the redirect_uri parameter. When running the flow, we should start from http://localhost:3000 when starting from the wallet.
+
 ### Frontend .env file
 
 
