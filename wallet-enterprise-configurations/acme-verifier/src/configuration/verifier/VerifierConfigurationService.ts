@@ -35,7 +35,7 @@ const pidDescriptor = {
 			},
 			{
 				"name": "Birthdate",
-				"path": ['$.birth_date'],
+				"path": ['$.birthdate'],
 				"filter": {}
 			}
 		]
