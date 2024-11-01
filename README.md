@@ -1,5 +1,37 @@
+# Funke Stage 2 Wallet Ecosystem
 
 
+### Setup
+
+
+
+```
+git clone git@github.com:gunet/funke-s2-wallet-ecosystem.git
+cd funke-s2-wallet-ecosystem/
+git submodule init      #initialize your local configuration file
+git submodule update    #fetch code from all repos
+git submodule update --remote  # to get update all submodules from the remote repos and merge
+
+## start the ecosystem for the first time with '-t'
+## always use 'COMPOSE_PROFILES=ausweis' when testing without physical card
+COMPOSE_PROFILES=ausweis node ecosystem.js up -t
+
+# ...
+
+## initialize the database
+node ecosystem.js init
+```
+
+
+### secure.wwwallet.local as wallet frontend callback url
+
+Include the following line in the `/etc/hosts` file
+
+```
+127.0.0.1	secure.wwwallet.local
+```
+
+The secure.wwwallet.local will only be used as a callback. It is used only because the Funke PID issuer does not accept non-https urls for the redirect_uri parameter. When running the flow, we should start from http://localhost:3000 when starting from the wallet.
 
 ### Frontend .env file
 
@@ -22,7 +54,10 @@ REACT_APP_DID_KEY_VERSION=jwk_jcs-pub
 REACT_APP_VERSION=$npm_package_version
 REACT_APP_CONSOLE_TYPES=info,warn,error
 REACT_APP_WEBAUTHN_RPID=localhost
-REACT_APP_OPENID4VCI_REDIRECT_URI=http://localhost:3000
+REACT_APP_OPENID4VCI_REDIRECT_URI=https://secure.wwwallet.local:8443/
 REACT_APP_OPENID4VP_SAN_DNS_CHECK=false
 GENERATE_SOURCEMAP=false
+REACT_APP_OPENID4VCI_EID_CLIENT_URL=http://127.0.0.1:24727/eID-Client
+REACT_APP_PID_CREDENTIAL_ISSUER_IDENTIFIER=https://demo.pid-issuer.bundesdruckerei.de/c
 ```
+
