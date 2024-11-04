@@ -8,6 +8,13 @@ import "reflect-metadata";
 
 const pidDescriptor = {
 	"id": "VerifiableId",
+	"format": {
+		"vc+sd-jwt": {
+			"alg": [
+				"ES256"
+			]
+		},
+	},
 	"constraints": {
 		"fields": [
 			{
