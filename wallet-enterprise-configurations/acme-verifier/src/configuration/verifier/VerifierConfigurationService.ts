@@ -8,6 +8,13 @@ import "reflect-metadata";
 
 const pidDescriptor = {
 	"id": "VerifiableId",
+	"format": {
+		"vc+sd-jwt": {
+			"alg": [
+				"ES256"
+			]
+		},
+	},
 	"constraints": {
 		"fields": [
 			{
@@ -42,6 +49,57 @@ const pidDescriptor = {
 	}
 }
 
+const mdocPIDPresentationDefinition = {
+	"id": "MdocPID",
+	"title": "MDOC PID",
+	"description": "Required Fields: Given Name, Family Name, Age Over 18, BirthDate",
+	"input_descriptors": [
+		{
+			"id": "eu.europa.ec.eudi.pid.1",
+			"format": {
+				"mso_mdoc": {
+					"alg": [
+						"ES256"
+					]
+				},
+			},
+			"constraints": {
+				"limit_disclosure": "required",
+				"fields": [
+					{
+						"name": "Family Name",
+						"path": [
+							"$['eu.europa.ec.eudi.pid.1']['family_name']"
+						],
+						"intent_to_retain": false
+					},
+					{
+						"name": "Given Name",
+						"path": [
+							"$['eu.europa.ec.eudi.pid.1']['given_name']"
+						],
+						"intent_to_retain": false
+					},
+					{
+						"name": "Birthdate",
+						"path": [
+							"$['eu.europa.ec.eudi.pid.1']['birth_date']"
+						],
+						"intent_to_retain": false
+					},
+					{
+						"name": "Age over 18",
+						"path": [
+							"$['eu.europa.ec.eudi.pid.1']['age_over_18']"
+						],
+						"intent_to_retain": false
+					},
+				]
+			}
+		}
+	]
+}
+
 
 @injectable()
 export class VerifierConfigurationService implements VerifierConfigurationInterface {
@@ -58,6 +116,7 @@ export class VerifierConfigurationService implements VerifierConfigurationInterf
 					pidDescriptor
 				]
 			},
+			mdocPIDPresentationDefinition,
 		]
 	}
 
