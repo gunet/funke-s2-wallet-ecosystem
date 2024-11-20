@@ -20,7 +20,7 @@ COPY ./sites/ /etc/apache2/sites-available/
 
 COPY ./certs/ /etc/apache2/certs/
 
-RUN a2ensite secure.wwwallet.local-ssl
+RUN a2ensite secure.wwwallet.local-ssl secure.wwwallet-ssl
 
 EXPOSE 80/tcp 443/tcp
 
