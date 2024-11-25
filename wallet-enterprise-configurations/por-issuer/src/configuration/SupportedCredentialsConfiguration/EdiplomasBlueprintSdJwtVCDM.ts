@@ -15,8 +15,8 @@ import { randomUUID } from "crypto";
 import { Request } from "express";
 import fs from 'fs';
 
-const pidDataset = parseDataset(path.join(__dirname, "../../../../dataset/lsp_uc1_test_identities.xlsx"), "PID");
-const porDataset = parseDataset(path.join(__dirname, "../../../../dataset/lsp_uc1_test_identities.xlsx"), "POR");
+const pidDataset = parseDataset(path.join(__dirname, "../../../../dataset/test_identities.xlsx"), "PID");
+const porDataset = parseDataset(path.join(__dirname, "../../../../dataset/test_identities.xlsx"), "POR");
 
 console.log("Pid dataset = ", pidDataset);
 console.log("Por dataset = ", porDataset);
@@ -63,7 +63,7 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 		}
 
 
-		const pidEntries = parseDataset(path.join(__dirname, "../../../../dataset/lsp_uc1_test_identities.xlsx"), "PID");
+		const pidEntries = parseDataset(path.join(__dirname, "../../../../dataset/test_identities.xlsx"), "PID");
 		console.log("Pid entries = ", pidEntries)
 		if (!pidEntries || pidEntries.length == 0) {
 			console.log("No pid entries");
@@ -96,7 +96,7 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 
 		const pidRecordId = pidEntry.Number;
 
-		const porEntries = parseDataset(path.join(__dirname, "../../../../dataset/lsp_uc1_test_identities.xlsx"), "POR");
+		const porEntries = parseDataset(path.join(__dirname, "../../../../dataset/test_identities.xlsx"), "POR");
 
 		console.log("Por entries = ", porEntries);
 		if (!porEntries) {
@@ -155,7 +155,7 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 		if (!userSession?.family_name || !userSession?.given_name || !userSession?.birthdate) {
 			throw new Error("Cannot generate credential: (family_name, given_name, birthdate) is missing");
 		}
-		const pidEntries = parseDataset(path.join(__dirname, "../../../../dataset/lsp_uc1_test_identities.xlsx"), "PID");
+		const pidEntries = parseDataset(path.join(__dirname, "../../../../dataset/test_identities.xlsx"), "PID");
 		console.log("Pid entries = ", pidEntries)
 		if (!pidEntries || pidEntries.length == 0) {
 			console.log("No pid entries");
@@ -188,7 +188,7 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 
 		const pidRecordId = pidEntry.Number;
 
-		const porEntries = parseDataset(path.join(__dirname, "../../../../dataset/lsp_uc1_test_identities.xlsx"), "POR");
+		const porEntries = parseDataset(path.join(__dirname, "../../../../dataset/test_identities.xlsx"), "POR");
 
 		console.log("Por entries = ", porEntries);
 		if (!porEntries) {
