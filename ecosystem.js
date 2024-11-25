@@ -154,19 +154,19 @@ function buildImages() {
 		execSync(`docker build -t ghcr.io/gunet/wallet-enterprise:${imageTag} wallet-enterprise`, { stdio: 'inherit' });
 	}
 
-	if (args.length <= 1 || args.includes("vid-issuer")) {
-		execSync(`cd wallet-enterprise && docker build -t ghcr.io/gunet/wallet-enterprise:base -f base.Dockerfile .`, { stdio: 'inherit' });
-		execSync(`docker build -t ghcr.io/gunet/wallet-enterprise-vid-issuer:${imageTag} -f wallet-enterprise-configurations/vid-issuer/Dockerfile .`, { stdio: 'inherit' });
-	}
+	// if (args.length <= 1 || args.includes("vid-issuer")) {
+	// 	execSync(`cd wallet-enterprise && docker build -t ghcr.io/gunet/wallet-enterprise:base -f base.Dockerfile .`, { stdio: 'inherit' });
+	// 	execSync(`docker build -t ghcr.io/gunet/wallet-enterprise-vid-issuer:${imageTag} -f wallet-enterprise-configurations/vid-issuer/Dockerfile .`, { stdio: 'inherit' });
+	// }
 
-	if (args.length <= 1 || args.includes("ehic-issuer")) {
-		execSync(`cd wallet-enterprise && docker build -t ghcr.io/gunet/wallet-enterprise:base -f base.Dockerfile .`, { stdio: 'inherit' });
-		execSync(`docker build -t ghcr.io/gunet/wallet-enterprise-ehic-issuer:${imageTag} -f wallet-enterprise-configurations/ehic-issuer/Dockerfile .`, { stdio: 'inherit' });
-	}
+	// if (args.length <= 1 || args.includes("ehic-issuer")) {
+	// 	execSync(`cd wallet-enterprise && docker build -t ghcr.io/gunet/wallet-enterprise:base -f base.Dockerfile .`, { stdio: 'inherit' });
+	// 	execSync(`docker build -t ghcr.io/gunet/wallet-enterprise-ehic-issuer:${imageTag} -f wallet-enterprise-configurations/ehic-issuer/Dockerfile .`, { stdio: 'inherit' });
+	// }
 
-	if (args.length <= 1 || args.includes("diploma-issuer")) {
+	if (args.length <= 1 || args.includes("por-issuer")) {
 		execSync(`cd wallet-enterprise && docker build -t ghcr.io/gunet/wallet-enterprise:base -f base.Dockerfile .`, { stdio: 'inherit' });
-		execSync(`docker build -t ghcr.io/gunet/wallet-enterprise-diploma-issuer:${imageTag} -f wallet-enterprise-configurations/diploma-issuer/Dockerfile .`, { stdio: 'inherit' });
+		execSync(`docker build -t ghcr.io/gunet/wallet-enterprise-por-issuer:${imageTag} -f wallet-enterprise-configurations/por-issuer/Dockerfile .`, { stdio: 'inherit' });
 	}
 
 	if (args.length <= 1 || args.includes("acme-verifier")) {
