@@ -7,6 +7,7 @@ import "reflect-metadata";
 
 const pidDescriptor = {
 	"id": "VID",
+	"format": { "vc+sd-jwt": { alg: [ 'ES256' ] }  },
 	"constraints": {
 		"fields": [
 			{

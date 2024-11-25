@@ -1,7 +1,7 @@
 import * as XLSX from 'xlsx';
 import fs from 'fs';
 
-export function parseDiplomaData(filePath: string) {
+export function parseDataset(filePath: string, sheetName: "PID" | "POR") {
 	try {
 		const readOpts: XLSX.ParsingOptions = {
 			cellText: false, 
@@ -12,8 +12,7 @@ export function parseDiplomaData(filePath: string) {
 	
 		// Parse the workbook
 		const workbook = XLSX.read(fileBuffer, readOpts);
-		
-		const sheetName = "DIPLOMA"
+
 		// Get the first worksheet
 		const worksheet = workbook.Sheets[sheetName];
 
@@ -33,10 +32,10 @@ export function parseDiplomaData(filePath: string) {
 		data = data.map((row) => {
 			return {
 				...row,
-				pid_id: String(row.pid_id)
 			}
 		});
 
+		data.shift(); // remove the first element which indicates if field is mandatory or not
 
 		return data;
 	}

@@ -4,10 +4,10 @@ WORKDIR /app
 
 COPY wallet-enterprise/ .
 RUN rm -rf src/configuration/
-COPY ./wallet-enterprise-configurations/diploma-issuer/src/configuration /app/src/configuration
-COPY ./wallet-enterprise-configurations/diploma-issuer/public/styles/main.css /app/public/styles/main.css
-COPY ./wallet-enterprise-configurations/diploma-issuer/public/images /app/public/images
-
+COPY ./wallet-enterprise-configurations/por-issuer/src/configuration /app/src/configuration
+COPY ./wallet-enterprise-configurations/por-issuer/public/styles/main.css /app/public/styles/main.css
+COPY ./wallet-enterprise-configurations/por-issuer/public/images /app/public/images
+COPY ./wallet-enterprise-configurations/por-issuer/views/issuer/auth-method-selection.pug /app/views/issuer/auth-method-selection.pug
 RUN yarn cache clean && yarn install && yarn build
 
 # Production stage
