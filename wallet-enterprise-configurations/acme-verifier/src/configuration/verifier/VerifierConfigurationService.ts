@@ -96,6 +96,53 @@ const mdocPidDescriptor = {
 	}
 }
 
+const sdJwtPorFields = [
+	{
+		"name": "Credential type",
+		"path": ["$.vct"],
+		"filter": {
+			"type": "string",
+			"enum": [
+				"urn:credential:por"
+			]
+		}
+	},
+	{
+		"name": "Legal Person Identifier",
+		"path": ['$.legal_person_identifier'],
+		"filter": {}
+	},
+	{
+		"name": "Legal Name",
+		"path": ['$.legal_name'],
+		"filter": {}
+	},
+	{
+		"name": "Full Powers",
+		"path": ['$.full_powers'],
+		"filter": {}
+	},
+	{
+		"name": "Expiry Date",
+		"path": ['$.expiry_date'],
+		"filter": {}
+	}
+]
+
+const sdJwtPorDescriptor = {
+	"id": "POR",
+	"format": {
+		"vc+sd-jwt": {
+			"alg": [
+				"ES256"
+			]
+		},
+	},
+	"constraints": {
+		"fields": sdJwtPorFields
+	}
+}
+
 
 @injectable()
 export class VerifierConfigurationService implements VerifierConfigurationInterface {
@@ -121,7 +168,7 @@ export class VerifierConfigurationService implements VerifierConfigurationInterf
 			},
 			{
 				"id": "CustomVerifiableId",
-				"title": "Custom Verifiable ID",
+				"title": "Custom PID",
 				"description": "Select the format and the fields you want to request.",
 				_selectable: true,
 				"input_descriptors": [
@@ -136,6 +183,15 @@ export class VerifierConfigurationService implements VerifierConfigurationInterf
 							]
 						}
 					}
+				]
+			},
+			{
+				"id": "POR",
+				"title": "Custom POR",
+				"description": "Select the POR fields you want to request: Legal Person Identifier, Legal Name, Full Powers, Expiry Date",
+				_selectable: true,
+				"input_descriptors": [
+					sdJwtPorDescriptor
 				]
 			},
 		]
