@@ -223,6 +223,10 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 			legal_person_identifier: true,
 			legal_name: true,
 			full_powers: true,
+			effective_until_date: true,
+			effective_from_date: true,
+			expiry_date: true,
+			issuing_date: true,
 		};
 
 		const { jws } = await this.getCredentialSigner()
