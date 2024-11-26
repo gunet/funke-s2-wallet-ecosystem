@@ -4,6 +4,10 @@ import { authorizationServerMetadataConfiguration } from "../../authorizationSer
 import { config } from "../../../config";
 import { VerifierConfigurationInterface } from "../../services/interfaces";
 import "reflect-metadata";
+import { PresentationParserChain } from "../../vp_token/PresentationParserChain";
+import { PublicKeyResolverChain } from "../../vp_token/PublicKeyResolverChain";
+import * as mdl from '@auth0/mdl';
+import { base64url } from "jose";
 
 
 const sdJwtPidFields = [
@@ -147,6 +151,34 @@ const sdJwtPorDescriptor = {
 @injectable()
 export class VerifierConfigurationService implements VerifierConfigurationInterface {
 
+	getPublicKeyResolverChain(): PublicKeyResolverChain {
+		return new PublicKeyResolverChain();
+	}
+
+	getPresentationParserChain(): PresentationParserChain {
+		return new PresentationParserChain()
+			.addParser({
+				parse: async function (presentationRawFormat) {
+					if (typeof presentationRawFormat != 'string') {
+						return { error: "PARSE_ERROR" };
+					}
+
+					try {
+						const parseRes = mdl.parse(base64url.decode(presentationRawFormat));
+						if (parseRes.documents[0].docType != "eu.europa.ec.eudi.pid.1") {
+							return { error: "PARSE_ERROR" };
+						}
+						return {
+							credentialImage: config.url + "/images/card.png",
+							credentialPayload: parseRes.documents[0].getIssuerNameSpace(parseRes.documents[0].issuerSignedNameSpaces[0])
+						}
+					}
+					catch(err) {
+						return { error: "PARSE_ERROR" };
+					}
+				},
+			})
+	}
 
 	getPresentationDefinitions(): any[] {
 		return [

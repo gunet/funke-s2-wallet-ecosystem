@@ -8,7 +8,7 @@ import { parseDataset } from "../datasetParser";
 import path from "path";
 
 
-const datasetName = "lsp_uc1_test_identities.xlsx";
+const datasetName = "test_identities.xlsx";
 parseDataset(path.join(__dirname, "../../../../dataset/" + datasetName), "POR");
 
 export const authChain = new AuthenticationChainBuilder()
