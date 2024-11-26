@@ -1,5 +1,9 @@
 # Funke Stage 2 Wallet Ecosystem
 
+Besides the Funke wallet, the ecosystem also includes
+* The Funke EAA Issuer: https://por.funke.wwwallet.org
+* The Funke Verifier: https://verifier.funke.wwwallet.org
+
 
 ### Setup
 
