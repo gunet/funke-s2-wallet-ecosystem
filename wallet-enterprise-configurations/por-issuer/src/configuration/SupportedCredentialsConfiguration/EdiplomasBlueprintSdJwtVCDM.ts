@@ -14,6 +14,7 @@ import path from "path";
 import { randomUUID } from "crypto";
 import { Request } from "express";
 import fs from 'fs';
+import base64url from 'base64url';
 
 const pidDataset = parseDataset(path.join(__dirname, "../../../../dataset/test_identities.xlsx"), "PID");
 const porDataset = parseDataset(path.join(__dirname, "../../../../dataset/test_identities.xlsx"), "POR");
@@ -50,7 +51,8 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 			name: "Power of Representation credential",
 			description: "This is a Power of Representation credential",
 			background_image: { uri: config.url + "/images/card.png" },
-			background_color: "#4CC3DD",
+			background_color: "#b8ac6e",
+			text_color: "#000000",
 			locale: 'en-US',
 		}
 	}
@@ -81,7 +83,7 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 				diploma.birth_date.toISOString() == new Date(userSession.birthdate as any).toISOString()
 			)[0];
 		}
-		catch(err) {
+		catch (err) {
 			console.error(err);
 			throw new Error("Could not get profile");
 		}
@@ -129,14 +131,14 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 				{ path: "legal_name", value: porEntry.legal_name },
 				{ path: "legal_person_identifier", value: porEntry.legal_person_identifier },
 				{ path: "full_powers", value: porEntry.full_powers },
-	
+
 				{ path: "effective_from_date", value: new Date(porEntry.effective_from_date).toLocaleString() },
 				{ path: "effective_until_date", value: new Date(porEntry.effective_until_date).toLocaleString() },
 			];
-	
+
 			console.log("paths with values = ", pathsWithValues)
 			const dataUri = generateDataUriFromSvg(svgText, pathsWithValues);
-	
+
 			const credentialView = {
 				credential_id: randomUUID(),
 				credential_supported_object: this.exportCredentialSupportedObject(),
@@ -145,7 +147,7 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 			};
 			return credentialView;
 		}
-		catch(err) {
+		catch (err) {
 			console.error(err);
 			throw new Error("Could not get profile");
 		}
@@ -173,7 +175,7 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 				diploma.birth_date.toISOString() == new Date(userSession.birthdate as any).toISOString()
 			)[0];
 		}
-		catch(err) {
+		catch (err) {
 			console.error(err);
 			throw new Error("Could not get profile");
 		}
@@ -226,7 +228,7 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 		};
 
 		const { jws } = await this.getCredentialSigner()
-			.sign(payload, { typ: "JWT", vctm: this.metadata() }, disclosureFrame);
+		.sign(payload, { typ: "vc+sd-jwt", vctm: [base64url.encode(JSON.stringify(this.metadata()))] }, disclosureFrame);
 
 		const response = {
 			format: this.getFormat(),
@@ -241,95 +243,86 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 			"vct": this.getId(),
 			"name": "Power of Representation credential",
 			"description": "This is a Power of Representation credential",
+			
 			"display": [
 				{
-					"en-US": {
-						"name": "Power of Representation credential",
-						"rendering": {
-							"simple": {
-								"logo": {
-									"uri": config.url + "/images/card.png",
-									"uri#integrity": "sha256-c7fbfe45428aa2715f01065d812c9f6fd52f99c02e4018fb5761a7cbf4894257",
-									"alt_text": "This is a Power of Representation credential",
-								},
-								"background_color": "#12107c",
-								"text_color": "#FFFFFF"
+					"lang": "en-US",
+					"name": "Power of Representation credential",
+					"rendering": {
+						"simple": {
+							"logo": {
+								"uri": config.url + "/images/card.png",
+								"uri#integrity": "sha256-c7fbfe45428aa2715f01065d812c9f6fd52f99c02e4018fb5761a7cbf4894257",
+								"alt_text": "This is a Power of Representation credential",
 							},
-							"svg_templates": [
-								{
-									"uri": config.url + "/images/template.svg",
-								}
-							],
-						}
+							"background_color": "#b8ac6e",
+							"text_color": "#000000"
+						},
+						"svg_templates": [
+							{
+								"uri": config.url + "/images/template.svg",
+							}
+						],
 					}
 				}
 			],
 			"claims": [
 				{
-					"path": ["title"],
-					"display": {
-						"en-US": {
-							"label": "Diploma Title",
-							"description": "The title of the Diploma"
+					"path": ["legal_name"],
+					"display": [
+						{
+							"lang": "en-US",
+							"label": "Legal Name",
+							"description": "The Legal name of the Power of Representation credential"
 						}
-					},
-					"verification": "verified",
-					"sd": "allowed"
+					],
+					"svg_id": "legal_name"
 				},
 				{
-					"path": ["grade"],
-					"display": {
-						"en-US": {
-							"label": "Grade",
-							"description": "Graduate's grade (0-10)"
+					"path": ["legal_person_identifier"],
+					"display": [
+						{
+							"lang": "en-US",
+							"label": "legal_person_identifier",
+							"description": "The Legal legal person identifier of the Power of Representation credential"
 						}
-					},
-					"verification": "verified",
-					"sd": "allowed"
+					],
+					"svg_id": "legal_person_identifier"
 				},
 				{
-					"path": ["eqf_level"],
-					"display": {
-						"en-US": {
-							"label": "EQF Level",
-							"description": "The EQF level of the diploma according to https://europass.europa.eu/en/description-eight-eqf-levels"
+					"path": ["full_powers"],
+					"display": [
+						{
+							"lang": "en-US",
+							"label": "full Powers",
+							"description": "The full Powers of the Power of Representation credential"
 						}
-					},
-					"verification": "verified",
-					"sd": "allowed"
+					],
+					"svg_id": "full_powers"
 				},
 				{
-					"path": ["graduation_date"],
-					"display": {
-						"en-US": {
-							"label": "Graduation Date",
-							"description": "The graduation data"
+					"path": ["effective_from_date"],
+					"display": [
+						{
+							"lang": "en-US",
+							"label": "Effective from date",
+							"description": "The effective from date"
 						}
-					},
-					"verification": "verified",
-					"sd": "allowed"
+					],
+					"svg_id": "effective_from_date"
+				},
+				{
+					"path": ["effective_until_date"],
+					"display": [
+						{
+							"lang": "en-US",
+							"label": "Effective until date",
+							"description": "The effective until date"
+						}
+					],
+					"svg_id": "effective_until_date"
 				},
 			],
-			"schema": {
-				"$schema": "http://json-schema.org/draft-07/schema#",
-				"type": "object",
-				"properties": {
-					"title": {
-						"type": "string"
-					},
-					"grade": {
-						"type": "string"
-					},
-					"eqf_level": {
-						"type": "string",
-					},
-					"graduation_date": {
-						"type": "string"
-					}
-				},
-				"required": [],
-				"additionalProperties": true
-			}
 		}
 
 	}
