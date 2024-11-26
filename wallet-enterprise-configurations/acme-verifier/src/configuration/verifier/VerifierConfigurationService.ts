@@ -7,8 +7,27 @@ import "reflect-metadata";
 import { PresentationParserChain } from "../../vp_token/PresentationParserChain";
 import { PublicKeyResolverChain } from "../../vp_token/PublicKeyResolverChain";
 import * as mdl from '@auth0/mdl';
-import { base64url } from "jose";
+import { HasherAlgorithm, HasherAndAlgorithm, SdJwt } from "@sd-jwt/core";
+import crypto from 'node:crypto';
+import * as jose from 'jose';
+import { generateDataUriFromSvg } from "../../lib/generateDataUriFromSvg";
+import axios from "axios";
+import { formatDateDDMMYYYY } from "../../lib/formatDate";
 
+
+
+// Encoding the string into a Uint8Array
+const hasherAndAlgorithm: HasherAndAlgorithm = {
+	hasher: (input: string) => {
+		// return crypto.subtle.digest('SHA-256', encoder.encode(input)).then((v) => new Uint8Array(v));
+		return new Promise((resolve, _reject) => {
+			const hash = crypto.createHash('sha256');
+			hash.update(input);
+			resolve(new Uint8Array(hash.digest()));
+		});
+	},
+	algorithm: HasherAlgorithm.Sha256
+}
 
 const sdJwtPidFields = [
 	{
@@ -164,7 +183,7 @@ export class VerifierConfigurationService implements VerifierConfigurationInterf
 					}
 
 					try {
-						const parseRes = mdl.parse(base64url.decode(presentationRawFormat));
+						const parseRes = mdl.parse(jose.base64url.decode(presentationRawFormat));
 						if (parseRes.documents[0].docType != "eu.europa.ec.eudi.pid.1") {
 							return { error: "PARSE_ERROR" };
 						}
@@ -176,6 +195,52 @@ export class VerifierConfigurationService implements VerifierConfigurationInterf
 					catch(err) {
 						return { error: "PARSE_ERROR" };
 					}
+				},
+			})
+			.addParser({
+				parse: async function (presentationRawFormat) {
+					if (typeof presentationRawFormat != 'string') {
+						return { error: "PARSE_ERROR" };
+					}
+
+
+
+					let credentialPayload = null;
+					let credentialImage = null;
+
+					try {
+						if (presentationRawFormat.includes('~')) {
+							const parsedCredential = await SdJwt.fromCompact<Record<string, unknown>, any>(presentationRawFormat)
+								.withHasher(hasherAndAlgorithm)
+								.getPrettyClaims();
+							credentialPayload = parsedCredential;
+							const vct = parsedCredential.vct;
+							if (vct !== "https://example.bmi.bund.de/credential/pid/1.0" && vct !== "urn:eu.europa.ec.eudi:pid:1") {
+								console.log('error', 'Wrong vct');
+								return { error: "PARSE_ERROR" };
+							}
+							const pathsWithValues = [
+								{ path: "family_name", value: parsedCredential.family_name },
+								{ path: "given_name", value: parsedCredential.given_name },
+								{ path: "birthdate", value: formatDateDDMMYYYY(parsedCredential.birthdate) },
+								{ path: "exp", value: new Date(parsedCredential.exp * 1000).toLocaleDateString() }
+							];
+							// @ts-ignore
+							const response =  await axios.get(config.url + '/images/pid_template.svg');
+							const svgText = response.data;
+							const dataUri = generateDataUriFromSvg(svgText, pathsWithValues); // replaces all with empty string
+							credentialImage = dataUri;
+							return {
+								credentialImage: credentialImage as string,
+								credentialPayload: credentialPayload as any,
+							}
+						}
+					}
+					catch(err) {
+						return { error: "PARSE_ERROR" };
+					}
+					return { error: "PARSE_ERROR" };
+
 				},
 			})
 	}
