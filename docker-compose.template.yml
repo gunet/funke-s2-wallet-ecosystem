@@ -172,6 +172,8 @@ services:
       resources:
           limits:
             memory: 1G
+    profiles:
+      - por
 
 volumes:
   datadir:

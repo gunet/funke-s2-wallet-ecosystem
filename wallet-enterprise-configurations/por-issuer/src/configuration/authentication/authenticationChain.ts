@@ -4,12 +4,12 @@ import { VerifierAuthenticationComponent } from "./VerifierAuthenticationCompone
 // import { InspectPersonalInfoComponent } from "./InspectPersonalInfoComponent";
 import { AuthenticationMethodSelectionComponent } from "./AuthenticationMethodSelectionComponent";
 import { GenericVIDAuthenticationComponent } from "../../authentication/authenticationComponentTemplates/GenericVIDAuthenticationComponent";
-import { parseDiplomaData } from "../datasetParser";
+import { parseDataset } from "../datasetParser";
 import path from "path";
 
 
-const datasetName = "por-dataset.xlsx";
-parseDiplomaData(path.join(__dirname, "../../../../dataset/" + datasetName));
+const datasetName = "test_identities.xlsx";
+parseDataset(path.join(__dirname, "../../../../dataset/" + datasetName), "POR");
 
 export const authChain = new AuthenticationChainBuilder()
 	// .addAuthenticationComponent(new ClientSelectionComponent("client-selection", CONSENT_ENTRYPOINT))

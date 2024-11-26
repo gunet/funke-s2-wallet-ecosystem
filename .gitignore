@@ -1,1 +1,3 @@
 docker-compose.yml
+.env.prod
+lsp_uc1_test_identities.xlsx
