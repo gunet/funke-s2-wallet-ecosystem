@@ -8,6 +8,9 @@ COPY ./wallet-enterprise-configurations/por-issuer/src/configuration /app/src/co
 COPY ./wallet-enterprise-configurations/por-issuer/public/styles/main.css /app/public/styles/main.css
 COPY ./wallet-enterprise-configurations/por-issuer/public/images /app/public/images
 COPY ./wallet-enterprise-configurations/por-issuer/views/issuer/auth-method-selection.pug /app/views/issuer/auth-method-selection.pug
+COPY ./wallet-enterprise-configurations/por-issuer/public/manifest.json /app/public/manifest.json
+COPY ./wallet-enterprise-configurations/por-issuer/public/site.webmanifest /app/public/site.webmanifest
+
 RUN yarn cache clean && yarn install && yarn build
 
 # Production stage
