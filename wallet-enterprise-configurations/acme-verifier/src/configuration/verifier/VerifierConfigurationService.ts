@@ -55,6 +55,86 @@ const sdJwtPidFields = [
 		"name": "Birthdate",
 		"path": ['$.birthdate'],
 		"filter": {}
+	},
+	{
+		"name": "Place of Birth",
+		"path": ['$.place_of_birth.locality'],
+		"filter": {}
+	},
+	{
+		"name": "Birth Year",
+		"path": ['$.age_birth_year'],
+		"filter": {}
+	},
+	{
+		"name": "Age in Years",
+		"path": ['$.age_in_years'],
+		"filter": {}
+	},
+	{
+		"name": "Family Name at Birth",
+		"path": ['$.birth_family_name'],
+		"filter": {}
+	},
+	{
+		"name": "Nationalities",
+		"path": ['$.nationalities'],
+		"filter": {}
+	},
+	{
+		"name": "Address - Locality",
+		"path": ['$.address.locality'],
+		"filter": {}
+	},
+	{
+		"name": "Address - Country",
+		"path": ['$.address.country'],
+		"filter": {}
+	},
+	{
+		"name": "Address - Postal Code",
+		"path": ['$.address.postal_code'],
+		"filter": {}
+	},
+	{
+		"name": "Address - Street Address",
+		"path": ['$.address.street_address'],
+		"filter": {}
+	},
+	{
+		"name": "Issuing Country",
+		"path": ['$.issuing_country'],
+		"filter": {}
+	},
+	{
+		"name": "Issuing Authority",
+		"path": ['$.issuing_authority'],
+		"filter": {}
+	},
+	{
+		"name": "Age Equal or over 12",
+		"path": ['$.age_equal_or_over.12'],
+		"filter": {}
+	},
+	{
+		"name": "Age Equal or over 14",
+		"path": ['$.age_equal_or_over.14'],
+		"filter": {}
+	},
+	{
+		"name": "Age Equal or over 16",
+		"path": ['$.age_equal_or_over.16'],
+		"filter": {}
+	},
+	{
+		"name": "Age Equal or over 18",
+		"path": ['$.age_equal_or_over.18'],
+		"filter": {}
+	},
+	{
+		"name": "Age Equal or over 21",
+		"path": ['$.age_equal_or_over.21'],
+		"filter": {}
 	}
 ]
 
@@ -89,6 +169,13 @@ const mdocPidFields = [
 		"intent_to_retain": false
 	},
 	{
+		"name": "Family Name at Birth",
+		"path": [
+			"$['eu.europa.ec.eudi.pid.1']['family_name_birth']"
+		],
+		"intent_to_retain": false
+	},
+	{
 		"name": "Birthdate",
 		"path": [
 			"$['eu.europa.ec.eudi.pid.1']['birth_date']"
@@ -96,9 +183,114 @@ const mdocPidFields = [
 		"intent_to_retain": false
 	},
 	{
+		"name": "Age over 12",
+		"path": [
+			"$['eu.europa.ec.eudi.pid.1']['age_over_12']"
+		],
+		"intent_to_retain": false
+	},
+	{
+		"name": "Age over 14",
+		"path": [
+			"$['eu.europa.ec.eudi.pid.1']['age_over_14']"
+		],
+		"intent_to_retain": false
+	},
+	{
+		"name": "Age over 16",
+		"path": [
+			"$['eu.europa.ec.eudi.pid.1']['age_over_16']"
+		],
+		"intent_to_retain": false
+	},
+	{
 		"name": "Age over 18",
 		"path": [
 			"$['eu.europa.ec.eudi.pid.1']['age_over_18']"
+		],
+		"intent_to_retain": false
+	},
+	{
+		"name": "Age over 21",
+		"path": [
+			"$['eu.europa.ec.eudi.pid.1']['age_over_21']"
+		],
+		"intent_to_retain": false
+	},
+	{
+		"name": "Age over 65",
+		"path": [
+			"$['eu.europa.ec.eudi.pid.1']['age_over_65']"
+		],
+		"intent_to_retain": false
+	},
+	{
+		"name": "Age in Years",
+		"path": [
+			"$['eu.europa.ec.eudi.pid.1']['age_in_years']"
+		],
+		"intent_to_retain": false
+	},
+	{
+		"name": "Birth Year",
+		"path": [
+			"$['eu.europa.ec.eudi.pid.1']['age_birth_year']"
+		],
+		"intent_to_retain": false
+	},
+	{
+		"name": "Birth Place",
+		"path": [
+			"$['eu.europa.ec.eudi.pid.1']['birth_place']"
+		],
+		"intent_to_retain": false
+	},
+	{
+		"name": "Nationality",
+		"path": [
+			"$['eu.europa.ec.eudi.pid.1']['nationality']"
+		],
+		"intent_to_retain": false
+	},
+	{
+		"name": "Resident Country",
+		"path": [
+			"$['eu.europa.ec.eudi.pid.1']['resident_country']"
+		],
+		"intent_to_retain": false
+	},
+	{
+		"name": "Resident Postal Code",
+		"path": [
+			"$['eu.europa.ec.eudi.pid.1']['resident_postal_code']"
+		],
+		"intent_to_retain": false
+	},
+	{
+		"name": "Resident City",
+		"path": [
+			"$['eu.europa.ec.eudi.pid.1']['resident_city']"
+		],
+		"intent_to_retain": false
+	},
+	{
+		"name": "Resident Street",
+		"path": [
+			"$['eu.europa.ec.eudi.pid.1']['resident_street']"
+		],
+		"intent_to_retain": false
+	},
+	{
+		"name": "Issuing Country",
+		"path": [
+			"$['eu.europa.ec.eudi.pid.1']['issuing_country']"
+		],
+		"intent_to_retain": false
+	},
+	{
+		"name": "Issuing Authority",
+		"path": [
+			"$['eu.europa.ec.eudi.pid.1']['issuing_authority']"
 		],
 		"intent_to_retain": false
 	},
@@ -149,6 +341,16 @@ const sdJwtPorFields = [
 		"name": "Expiry Date",
 		"path": ['$.expiry_date'],
 		"filter": {}
+	},
+	{
+		"name": "Effective From Date",
+		"path": ['$.effective_from_date'],
+		"filter": {}
+	},
+	{
+		"name": "Effective Until Date",
+		"path": ['$.effective_until_date'],
+		"filter": {}
 	}
 ]
 
@@ -192,7 +394,7 @@ export class VerifierConfigurationService implements VerifierConfigurationInterf
 							credentialPayload: parseRes.documents[0].getIssuerNameSpace(parseRes.documents[0].issuerSignedNameSpaces[0])
 						}
 					}
-					catch(err) {
+					catch (err) {
 						return { error: "PARSE_ERROR" };
 					}
 				},
@@ -226,7 +428,7 @@ export class VerifierConfigurationService implements VerifierConfigurationInterf
 								{ path: "exp", value: new Date(parsedCredential.exp * 1000).toLocaleDateString() }
 							];
 							// @ts-ignore
-							const response =  await axios.get(config.url + '/images/pid_template.svg');
+							const response = await axios.get(config.url + '/images/pid_template.svg');
 							const svgText = response.data;
 							const dataUri = generateDataUriFromSvg(svgText, pathsWithValues); // replaces all with empty string
 							credentialImage = dataUri;
@@ -236,7 +438,7 @@ export class VerifierConfigurationService implements VerifierConfigurationInterf
 							}
 						}
 					}
-					catch(err) {
+					catch (err) {
 						return { error: "PARSE_ERROR" };
 					}
 					return { error: "PARSE_ERROR" };
@@ -250,7 +452,7 @@ export class VerifierConfigurationService implements VerifierConfigurationInterf
 			{
 				"id": "PID",
 				"title": "SD-JWT PID",
-				"description": "Required Fields: VC type, Given Name, Family Name & Birthdate",
+				"description": "Required Fields: Credential type, Given Name, Family Name, Birthdate, Place of Birth, Birth Year, Age in Years, Family Name at Birth, Nationalities, Address, Issuing Country, Issuing Authority",
 				"input_descriptors": [
 					sdJwtPidDescriptor
 				]
@@ -258,7 +460,7 @@ export class VerifierConfigurationService implements VerifierConfigurationInterf
 			{
 				"id": "MdocPID",
 				"title": "MDOC PID",
-				"description": "Required Fields: Given Name, Family Name, Age Over 18, BirthDate",
+				"description": "Required Fields: Family Name, Given Name, Family Name at Birth, Birthdate, Age, Birth Year, Birth Place, Nationality, Resident Info, Issuing Country, Issuing Authority",
 				"input_descriptors": [
 					mdocPidDescriptor
 				]
@@ -285,9 +487,18 @@ export class VerifierConfigurationService implements VerifierConfigurationInterf
 			{
 				"id": "POR",
 				"title": "Custom POR",
-				"description": "Select the POR fields you want to request: Legal Person Identifier, Legal Name, Full Powers, Expiry Date",
+				"description": "Select the POR fields you want to request: Legal Person Identifier, Legal Name, Full Powers, Expiry Date, Effective From Date, Effective Until Date",
 				_selectable: true,
 				"input_descriptors": [
+					sdJwtPorDescriptor
+				]
+			},
+			{
+				"id": "CombinedPidWithPor",
+				"title": "PID with POR",
+				"description": "Combined Presentation of PID and POR",
+				"input_descriptors": [
+					sdJwtPidDescriptor,
 					sdJwtPorDescriptor
 				]
 			},
