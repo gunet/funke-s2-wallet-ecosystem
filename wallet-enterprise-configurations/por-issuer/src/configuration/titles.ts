@@ -1,7 +1,7 @@
 // titles.ts
 
 const titles = {
-  index: "eDiplomas Issuer",
+  index: "Power of Representation Issuer",
   // Add other titles for different routes or pages here if needed
 };
 
