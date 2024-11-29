@@ -338,11 +338,6 @@ const sdJwtPorFields = [
 		"filter": {}
 	},
 	{
-		"name": "Expiry Date",
-		"path": ['$.expiry_date'],
-		"filter": {}
-	},
-	{
 		"name": "Effective From Date",
 		"path": ['$.effective_from_date'],
 		"filter": {}
@@ -487,7 +482,7 @@ export class VerifierConfigurationService implements VerifierConfigurationInterf
 			{
 				"id": "POR",
 				"title": "Custom POR",
-				"description": "Select the POR fields you want to request: Legal Person Identifier, Legal Name, Full Powers, Expiry Date, Effective From Date, Effective Until Date",
+				"description": "Select the POR fields you want to request: Legal Person Identifier, Legal Name, Full Powers, Effective From Date, Effective Until Date",
 				_selectable: true,
 				"input_descriptors": [
 					sdJwtPorDescriptor

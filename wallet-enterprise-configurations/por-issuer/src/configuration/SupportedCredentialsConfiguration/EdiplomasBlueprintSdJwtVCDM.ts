@@ -227,7 +227,6 @@ export class EdiplomasBlueprintSdJwtVCDM implements VCDMSupportedCredentialProto
 			full_powers: true,
 			effective_until_date: true,
 			effective_from_date: true,
-			expiry_date: true,
 			issuing_date: true,
 		};
 
