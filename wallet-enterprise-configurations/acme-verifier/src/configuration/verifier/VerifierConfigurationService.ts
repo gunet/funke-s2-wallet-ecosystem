@@ -39,115 +39,137 @@ const sdJwtPidFields = [
 				"https://example.bmi.bund.de/credential/pid/1.0",
 				"urn:eu.europa.ec.eudi:pid:1"
 			]
-		}
+		},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Given Name",
 		"path": ['$.given_name'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Family Name",
 		"path": ['$.family_name'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Birthdate",
 		"path": ['$.birthdate'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Place of Birth",
 		"path": ['$.place_of_birth.locality'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Birth Year",
 		"path": ['$.age_birth_year'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Age in Years",
 		"path": ['$.age_in_years'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Family Name at Birth",
 		"path": ['$.birth_family_name'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Nationalities",
 		"path": ['$.nationalities'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Address - Locality",
 		"path": ['$.address.locality'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Address - Country",
 		"path": ['$.address.country'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Address - Postal Code",
 		"path": ['$.address.postal_code'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Address - Street Address",
 		"path": ['$.address.street_address'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Issuing Country",
 		"path": ['$.issuing_country'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Issuing Authority",
 		"path": ['$.issuing_authority'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Age Equal or over 12",
 		"path": ['$.age_equal_or_over.12'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Age Equal or over 14",
 		"path": ['$.age_equal_or_over.14'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Age Equal or over 16",
 		"path": ['$.age_equal_or_over.16'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Age Equal or over 18",
 		"path": ['$.age_equal_or_over.18'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Age Equal or over 21",
 		"path": ['$.age_equal_or_over.21'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	}
 ]
 
 const sdJwtPidDescriptor = {
 	"id": "VerifiableId",
+	"name": "PID",
+	"purpose": "Present your SD-JWT PID",
 	"format": {
 		"vc+sd-jwt": {
-			"alg": [
-				"ES256"
-			]
+			"sd-jwt_alg_values": ["ES256"],
+			"kb-jwt_alg_values": ["ES256"]
 		},
 	},
 	"constraints": {
+		"limit_disclosure": "required",
 		"fields": sdJwtPidFields
 	}
 }
@@ -298,11 +320,12 @@ const mdocPidFields = [
 
 const mdocPidDescriptor = {
 	"id": "eu.europa.ec.eudi.pid.1",
+	"name": "MdocPID",
+	"purpose": "Present your MDOC PID",
 	"format": {
 		"mso_mdoc": {
-			"alg": [
-				"ES256"
-			]
+			"sd-jwt_alg_values": ["ES256"],
+			"kb-jwt_alg_values": ["ES256"]
 		},
 	},
 	"constraints": {
@@ -320,50 +343,59 @@ const sdJwtPorFields = [
 			"enum": [
 				"urn:credential:por"
 			]
-		}
+		},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Legal Person Identifier",
 		"path": ['$.legal_person_identifier'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Legal Name",
 		"path": ['$.legal_name'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Full Powers",
 		"path": ['$.full_powers'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Expiry Date",
 		"path": ['$.expiry_date'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Effective From Date",
 		"path": ['$.effective_from_date'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	},
 	{
 		"name": "Effective Until Date",
 		"path": ['$.effective_until_date'],
-		"filter": {}
+		"filter": {},
+		"intent_to_retain": false
 	}
 ]
 
 const sdJwtPorDescriptor = {
 	"id": "POR",
+	"name": "Custom POR",
+	"purpose": "Present your POR",
 	"format": {
 		"vc+sd-jwt": {
-			"alg": [
-				"ES256"
-			]
+			"sd-jwt_alg_values": ["ES256"],
+			"kb-jwt_alg_values": ["ES256"]
 		},
 	},
 	"constraints": {
+		"limit_disclosure": "required",
 		"fields": sdJwtPorFields
 	}
 }
@@ -473,6 +505,8 @@ export class VerifierConfigurationService implements VerifierConfigurationInterf
 				"input_descriptors": [
 					{
 						"id": undefined,
+						"name": "Custom PID",
+						"purpose": "Present your custom PID",
 						"format": undefined,
 						"constraints": {
 							"limit_disclosure": "required",
