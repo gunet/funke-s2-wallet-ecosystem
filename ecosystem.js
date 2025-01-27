@@ -106,6 +106,7 @@ if (action === "build-images") {
 }
 
 
+
 function init() {
 	const cleanupCredentialIssueTable = `DELETE FROM credential_issuer`;
 	const firstIssuerInsertion = `INSERT INTO credential_issuer (credentialIssuerIdentifier, clientId, visible) VALUES ('https://demo.pid-issuer.bundesdruckerei.de/c', 'fed79862-af36-4fee-8e64-89e3c91091ed', 1)`;
